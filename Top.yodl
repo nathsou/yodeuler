@@ -1,0 +1,10 @@
+import Euler2
+
+module Top(clk: clock, rst: bool) -> () {
+  let solution = Euler2::Solution(clk, rst)
+  
+  if solution.is_ready {
+    $printf("%d\n", solution.q)
+    $stop()
+  }
+}
