@@ -1,0 +1,52 @@
+import Primes
+
+const INPUT = 600851475143
+const N = $clog2(INPUT) / 2
+
+package Stage {
+    const INIT = 2'd0
+    const ITERATE = 2'd1
+    const PRIME_CHECK = 2'd2
+    const DONE = 2'd3
+}
+
+module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: uint<N>) {
+    let stage = Reg<uint<2>>(clk, rst)
+    let max = Reg<uint<N>>(clk, rst, q)
+    let i = Reg<uint<N>>(clk, rst)
+    let ready = Reg<bool>(clk, rst, q: is_ready)
+    let is_prime = Primes::IsPrime<N>(clk, n: i.q)
+    is_prime.rst = rst
+
+    match stage.q {
+        Stage::INIT => {
+            i.d = 2
+            stage.d = Stage::ITERATE
+        }
+        Stage::ITERATE => {
+            if i.q * i.q <= INPUT {
+                if INPUT % i.q == 0 {
+                    is_prime.rst = true
+                    stage.d = Stage::PRIME_CHECK
+                } else {
+                    i.d = i.q + 1
+                }
+            } else {
+                stage.d = Stage::DONE
+            }
+        }
+        Stage::PRIME_CHECK => {
+            if is_prime.is_ready {
+                if is_prime.q {
+                    max.d = i.q
+                }
+
+                i.d = i.q + 1
+                stage.d = Stage::ITERATE
+            }
+        }
+        Stage::DONE => {
+            ready.d = true
+        }
+    }
+}

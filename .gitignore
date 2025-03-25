@@ -1,3 +1,4 @@
 sim/obj_dir
 sim/*.fir
 sim/*.sv
+lab.ts

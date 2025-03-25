@@ -1,0 +1,25 @@
+
+module IsPrime<N: uint>(clk: clock, rst: bool, n: uint<N>) -> (is_ready: bool, q: bool) {
+    let i = Reg<uint<N>>(clk, rst)
+    let is_initialised = i.q[0]
+    i.d = is_initialised ? i.q : 3
+    let ready = Reg<bool>(clk, rst, q: is_ready)
+    let is_prime = Reg<bool>(clk, rst, q)
+
+    if n[0] == 1'b0 {
+        ready.d = true
+        is_prime.d = false
+    } else if is_initialised and (not ready.q) {
+        if n % i.q == 0 {
+            ready.d = true
+            is_prime.d = false
+        } else {
+            if i.q * i.q <: n {
+                i.d = i.q + 2
+            } else {
+                ready.d = true
+                is_prime.d = true
+            }
+        }
+    }
+}

@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
 
     top->final();
 
-    std::cout << "finsihed after " << i << " cycles" << std::endl;
+    std::cout << "finished after " << i << " cycles" << std::endl;
 
     return 0;
 }

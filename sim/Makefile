@@ -1,5 +1,6 @@
 # Adapted from https://projectf.io/posts/verilog-sim-verilator-sdl/
 
+SHELL := /usr/bin/fish
 VFLAGS = -O3 -DENABLE_INITIAL_MEM_ --x-assign fast --x-initial fast --noassert
 
 all: VTop
