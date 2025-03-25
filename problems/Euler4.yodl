@@ -1,0 +1,288 @@
+
+module Dabble(nib: uint<4>) -> (q: uint<4>) {
+    q = nib >= 5 ? nib + 3 : nib
+}
+
+// This module converts an 20-bit binary number into a 7-digit BCD (i.e. 28 bits) in a single clock cycle
+module BCD20(bin: uint<20>) -> (q: uint<28>) {
+    // The shift register width is d*4 + N = 48 bits
+    // Initialize the register: upper 28 bits are zero, lower 20 bits are the binary input
+    let r0 = {28'b0, bin}
+
+    // Iteration 0: adjust BCD nibbles in r0 and then shift left
+    let nibble_0_0 = Dabble(nib: r0[47:44]).q
+    let nibble_0_1 = Dabble(nib: r0[43:40]).q
+    let nibble_0_2 = Dabble(nib: r0[39:36]).q
+    let nibble_0_3 = Dabble(nib: r0[35:32]).q
+    let nibble_0_4 = Dabble(nib: r0[31:28]).q
+    let nibble_0_5 = Dabble(nib: r0[27:24]).q
+    let nibble_0_6 = Dabble(nib: r0[23:20]).q
+    let r0_adj = {nibble_0_0, nibble_0_1, nibble_0_2, nibble_0_3, nibble_0_4, nibble_0_5, nibble_0_6, r0[19:0]}
+    let r1 = {r0_adj[46:0], 1'b0}
+
+    // Iteration 1: adjust BCD nibbles in r1 and then shift left
+    let nibble_1_0 = Dabble(nib: r1[47:44]).q
+    let nibble_1_1 = Dabble(nib: r1[43:40]).q
+    let nibble_1_2 = Dabble(nib: r1[39:36]).q
+    let nibble_1_3 = Dabble(nib: r1[35:32]).q
+    let nibble_1_4 = Dabble(nib: r1[31:28]).q
+    let nibble_1_5 = Dabble(nib: r1[27:24]).q
+    let nibble_1_6 = Dabble(nib: r1[23:20]).q
+    let r1_adj = {nibble_1_0, nibble_1_1, nibble_1_2, nibble_1_3, nibble_1_4, nibble_1_5, nibble_1_6, r1[19:0]}
+    let r2 = {r1_adj[46:0], 1'b0}
+
+    // Iteration 2: adjust BCD nibbles in r2 and then shift left
+    let nibble_2_0 = Dabble(nib: r2[47:44]).q
+    let nibble_2_1 = Dabble(nib: r2[43:40]).q
+    let nibble_2_2 = Dabble(nib: r2[39:36]).q
+    let nibble_2_3 = Dabble(nib: r2[35:32]).q
+    let nibble_2_4 = Dabble(nib: r2[31:28]).q
+    let nibble_2_5 = Dabble(nib: r2[27:24]).q
+    let nibble_2_6 = Dabble(nib: r2[23:20]).q
+    let r2_adj = {nibble_2_0, nibble_2_1, nibble_2_2, nibble_2_3, nibble_2_4, nibble_2_5, nibble_2_6, r2[19:0]}
+    let r3 = {r2_adj[46:0], 1'b0}
+
+    // Iteration 3: adjust BCD nibbles in r3 and then shift left
+    let nibble_3_0 = Dabble(nib: r3[47:44]).q
+    let nibble_3_1 = Dabble(nib: r3[43:40]).q
+    let nibble_3_2 = Dabble(nib: r3[39:36]).q
+    let nibble_3_3 = Dabble(nib: r3[35:32]).q
+    let nibble_3_4 = Dabble(nib: r3[31:28]).q
+    let nibble_3_5 = Dabble(nib: r3[27:24]).q
+    let nibble_3_6 = Dabble(nib: r3[23:20]).q
+    let r3_adj = {nibble_3_0, nibble_3_1, nibble_3_2, nibble_3_3, nibble_3_4, nibble_3_5, nibble_3_6, r3[19:0]}
+    let r4 = {r3_adj[46:0], 1'b0}
+
+    // Iteration 4: adjust BCD nibbles in r4 and then shift left
+    let nibble_4_0 = Dabble(nib: r4[47:44]).q
+    let nibble_4_1 = Dabble(nib: r4[43:40]).q
+    let nibble_4_2 = Dabble(nib: r4[39:36]).q
+    let nibble_4_3 = Dabble(nib: r4[35:32]).q
+    let nibble_4_4 = Dabble(nib: r4[31:28]).q
+    let nibble_4_5 = Dabble(nib: r4[27:24]).q
+    let nibble_4_6 = Dabble(nib: r4[23:20]).q
+    let r4_adj = {nibble_4_0, nibble_4_1, nibble_4_2, nibble_4_3, nibble_4_4, nibble_4_5, nibble_4_6, r4[19:0]}
+    let r5 = {r4_adj[46:0], 1'b0}
+
+    // Iteration 5: adjust BCD nibbles in r5 and then shift left
+    let nibble_5_0 = Dabble(nib: r5[47:44]).q
+    let nibble_5_1 = Dabble(nib: r5[43:40]).q
+    let nibble_5_2 = Dabble(nib: r5[39:36]).q
+    let nibble_5_3 = Dabble(nib: r5[35:32]).q
+    let nibble_5_4 = Dabble(nib: r5[31:28]).q
+    let nibble_5_5 = Dabble(nib: r5[27:24]).q
+    let nibble_5_6 = Dabble(nib: r5[23:20]).q
+    let r5_adj = {nibble_5_0, nibble_5_1, nibble_5_2, nibble_5_3, nibble_5_4, nibble_5_5, nibble_5_6, r5[19:0]}
+    let r6 = {r5_adj[46:0], 1'b0}
+
+    // Iteration 6: adjust BCD nibbles in r6 and then shift left
+    let nibble_6_0 = Dabble(nib: r6[47:44]).q
+    let nibble_6_1 = Dabble(nib: r6[43:40]).q
+    let nibble_6_2 = Dabble(nib: r6[39:36]).q
+    let nibble_6_3 = Dabble(nib: r6[35:32]).q
+    let nibble_6_4 = Dabble(nib: r6[31:28]).q
+    let nibble_6_5 = Dabble(nib: r6[27:24]).q
+    let nibble_6_6 = Dabble(nib: r6[23:20]).q
+    let r6_adj = {nibble_6_0, nibble_6_1, nibble_6_2, nibble_6_3, nibble_6_4, nibble_6_5, nibble_6_6, r6[19:0]}
+    let r7 = {r6_adj[46:0], 1'b0}
+
+    // Iteration 7: adjust BCD nibbles in r7 and then shift left
+    let nibble_7_0 = Dabble(nib: r7[47:44]).q
+    let nibble_7_1 = Dabble(nib: r7[43:40]).q
+    let nibble_7_2 = Dabble(nib: r7[39:36]).q
+    let nibble_7_3 = Dabble(nib: r7[35:32]).q
+    let nibble_7_4 = Dabble(nib: r7[31:28]).q
+    let nibble_7_5 = Dabble(nib: r7[27:24]).q
+    let nibble_7_6 = Dabble(nib: r7[23:20]).q
+    let r7_adj = {nibble_7_0, nibble_7_1, nibble_7_2, nibble_7_3, nibble_7_4, nibble_7_5, nibble_7_6, r7[19:0]}
+    let r8 = {r7_adj[46:0], 1'b0}
+
+    // Iteration 8: adjust BCD nibbles in r8 and then shift left
+    let nibble_8_0 = Dabble(nib: r8[47:44]).q
+    let nibble_8_1 = Dabble(nib: r8[43:40]).q
+    let nibble_8_2 = Dabble(nib: r8[39:36]).q
+    let nibble_8_3 = Dabble(nib: r8[35:32]).q
+    let nibble_8_4 = Dabble(nib: r8[31:28]).q
+    let nibble_8_5 = Dabble(nib: r8[27:24]).q
+    let nibble_8_6 = Dabble(nib: r8[23:20]).q
+    let r8_adj = {nibble_8_0, nibble_8_1, nibble_8_2, nibble_8_3, nibble_8_4, nibble_8_5, nibble_8_6, r8[19:0]}
+    let r9 = {r8_adj[46:0], 1'b0}
+
+    // Iteration 9: adjust BCD nibbles in r9 and then shift left
+    let nibble_9_0 = Dabble(nib: r9[47:44]).q
+    let nibble_9_1 = Dabble(nib: r9[43:40]).q
+    let nibble_9_2 = Dabble(nib: r9[39:36]).q
+    let nibble_9_3 = Dabble(nib: r9[35:32]).q
+    let nibble_9_4 = Dabble(nib: r9[31:28]).q
+    let nibble_9_5 = Dabble(nib: r9[27:24]).q
+    let nibble_9_6 = Dabble(nib: r9[23:20]).q
+    let r9_adj = {nibble_9_0, nibble_9_1, nibble_9_2, nibble_9_3, nibble_9_4, nibble_9_5, nibble_9_6, r9[19:0]}
+    let r10 = {r9_adj[46:0], 1'b0}
+
+    // Iteration 10: adjust BCD nibbles in r10 and then shift left
+    let nibble_10_0 = Dabble(nib: r10[47:44]).q
+    let nibble_10_1 = Dabble(nib: r10[43:40]).q
+    let nibble_10_2 = Dabble(nib: r10[39:36]).q
+    let nibble_10_3 = Dabble(nib: r10[35:32]).q
+    let nibble_10_4 = Dabble(nib: r10[31:28]).q
+    let nibble_10_5 = Dabble(nib: r10[27:24]).q
+    let nibble_10_6 = Dabble(nib: r10[23:20]).q
+    let r10_adj = {nibble_10_0, nibble_10_1, nibble_10_2, nibble_10_3, nibble_10_4, nibble_10_5, nibble_10_6, r10[19:0]}
+    let r11 = {r10_adj[46:0], 1'b0}
+
+    // Iteration 11: adjust BCD nibbles in r11 and then shift left
+    let nibble_11_0 = Dabble(nib: r11[47:44]).q
+    let nibble_11_1 = Dabble(nib: r11[43:40]).q
+    let nibble_11_2 = Dabble(nib: r11[39:36]).q
+    let nibble_11_3 = Dabble(nib: r11[35:32]).q
+    let nibble_11_4 = Dabble(nib: r11[31:28]).q
+    let nibble_11_5 = Dabble(nib: r11[27:24]).q
+    let nibble_11_6 = Dabble(nib: r11[23:20]).q
+    let r11_adj = {nibble_11_0, nibble_11_1, nibble_11_2, nibble_11_3, nibble_11_4, nibble_11_5, nibble_11_6, r11[19:0]}
+    let r12 = {r11_adj[46:0], 1'b0}
+
+    // Iteration 12: adjust BCD nibbles in r12 and then shift left
+    let nibble_12_0 = Dabble(nib: r12[47:44]).q
+    let nibble_12_1 = Dabble(nib: r12[43:40]).q
+    let nibble_12_2 = Dabble(nib: r12[39:36]).q
+    let nibble_12_3 = Dabble(nib: r12[35:32]).q
+    let nibble_12_4 = Dabble(nib: r12[31:28]).q
+    let nibble_12_5 = Dabble(nib: r12[27:24]).q
+    let nibble_12_6 = Dabble(nib: r12[23:20]).q
+    let r12_adj = {nibble_12_0, nibble_12_1, nibble_12_2, nibble_12_3, nibble_12_4, nibble_12_5, nibble_12_6, r12[19:0]}
+    let r13 = {r12_adj[46:0], 1'b0}
+
+    // Iteration 13: adjust BCD nibbles in r13 and then shift left
+    let nibble_13_0 = Dabble(nib: r13[47:44]).q
+    let nibble_13_1 = Dabble(nib: r13[43:40]).q
+    let nibble_13_2 = Dabble(nib: r13[39:36]).q
+    let nibble_13_3 = Dabble(nib: r13[35:32]).q
+    let nibble_13_4 = Dabble(nib: r13[31:28]).q
+    let nibble_13_5 = Dabble(nib: r13[27:24]).q
+    let nibble_13_6 = Dabble(nib: r13[23:20]).q
+    let r13_adj = {nibble_13_0, nibble_13_1, nibble_13_2, nibble_13_3, nibble_13_4, nibble_13_5, nibble_13_6, r13[19:0]}
+    let r14 = {r13_adj[46:0], 1'b0}
+
+    // Iteration 14: adjust BCD nibbles in r14 and then shift left
+    let nibble_14_0 = Dabble(nib: r14[47:44]).q
+    let nibble_14_1 = Dabble(nib: r14[43:40]).q
+    let nibble_14_2 = Dabble(nib: r14[39:36]).q
+    let nibble_14_3 = Dabble(nib: r14[35:32]).q
+    let nibble_14_4 = Dabble(nib: r14[31:28]).q
+    let nibble_14_5 = Dabble(nib: r14[27:24]).q
+    let nibble_14_6 = Dabble(nib: r14[23:20]).q
+    let r14_adj = {nibble_14_0, nibble_14_1, nibble_14_2, nibble_14_3, nibble_14_4, nibble_14_5, nibble_14_6, r14[19:0]}
+    let r15 = {r14_adj[46:0], 1'b0}
+
+    // Iteration 15: adjust BCD nibbles in r15 and then shift left
+    let nibble_15_0 = Dabble(nib: r15[47:44]).q
+    let nibble_15_1 = Dabble(nib: r15[43:40]).q
+    let nibble_15_2 = Dabble(nib: r15[39:36]).q
+    let nibble_15_3 = Dabble(nib: r15[35:32]).q
+    let nibble_15_4 = Dabble(nib: r15[31:28]).q
+    let nibble_15_5 = Dabble(nib: r15[27:24]).q
+    let nibble_15_6 = Dabble(nib: r15[23:20]).q
+    let r15_adj = {nibble_15_0, nibble_15_1, nibble_15_2, nibble_15_3, nibble_15_4, nibble_15_5, nibble_15_6, r15[19:0]}
+    let r16 = {r15_adj[46:0], 1'b0}
+
+    // Iteration 16: adjust BCD nibbles in r16 and then shift left
+    let nibble_16_0 = Dabble(nib: r16[47:44]).q
+    let nibble_16_1 = Dabble(nib: r16[43:40]).q
+    let nibble_16_2 = Dabble(nib: r16[39:36]).q
+    let nibble_16_3 = Dabble(nib: r16[35:32]).q
+    let nibble_16_4 = Dabble(nib: r16[31:28]).q
+    let nibble_16_5 = Dabble(nib: r16[27:24]).q
+    let nibble_16_6 = Dabble(nib: r16[23:20]).q
+    let r16_adj = {nibble_16_0, nibble_16_1, nibble_16_2, nibble_16_3, nibble_16_4, nibble_16_5, nibble_16_6, r16[19:0]}
+    let r17 = {r16_adj[46:0], 1'b0}
+
+    // Iteration 17: adjust BCD nibbles in r17 and then shift left
+    let nibble_17_0 = Dabble(nib: r17[47:44]).q
+    let nibble_17_1 = Dabble(nib: r17[43:40]).q
+    let nibble_17_2 = Dabble(nib: r17[39:36]).q
+    let nibble_17_3 = Dabble(nib: r17[35:32]).q
+    let nibble_17_4 = Dabble(nib: r17[31:28]).q
+    let nibble_17_5 = Dabble(nib: r17[27:24]).q
+    let nibble_17_6 = Dabble(nib: r17[23:20]).q
+    let r17_adj = {nibble_17_0, nibble_17_1, nibble_17_2, nibble_17_3, nibble_17_4, nibble_17_5, nibble_17_6, r17[19:0]}
+    let r18 = {r17_adj[46:0], 1'b0}
+
+    // Iteration 18: adjust BCD nibbles in r18 and then shift left
+    let nibble_18_0 = Dabble(nib: r18[47:44]).q
+    let nibble_18_1 = Dabble(nib: r18[43:40]).q
+    let nibble_18_2 = Dabble(nib: r18[39:36]).q
+    let nibble_18_3 = Dabble(nib: r18[35:32]).q
+    let nibble_18_4 = Dabble(nib: r18[31:28]).q
+    let nibble_18_5 = Dabble(nib: r18[27:24]).q
+    let nibble_18_6 = Dabble(nib: r18[23:20]).q
+    let r18_adj = {nibble_18_0, nibble_18_1, nibble_18_2, nibble_18_3, nibble_18_4, nibble_18_5, nibble_18_6, r18[19:0]}
+    let r19 = {r18_adj[46:0], 1'b0}
+
+    // Iteration 19: adjust BCD nibbles in r19 and then shift left
+    let nibble_19_0 = Dabble(nib: r19[47:44]).q
+    let nibble_19_1 = Dabble(nib: r19[43:40]).q
+    let nibble_19_2 = Dabble(nib: r19[39:36]).q
+    let nibble_19_3 = Dabble(nib: r19[35:32]).q
+    let nibble_19_4 = Dabble(nib: r19[31:28]).q
+    let nibble_19_5 = Dabble(nib: r19[27:24]).q
+    let nibble_19_6 = Dabble(nib: r19[23:20]).q
+    let r19_adj = {nibble_19_0, nibble_19_1, nibble_19_2, nibble_19_3, nibble_19_4, nibble_19_5, nibble_19_6, r19[19:0]}
+    let r20 = {r19_adj[46:0], 1'b0}
+
+    // The final BCD result is contained in the upper 28 bits of r20
+    q = r20[47:20]
+}
+
+module IsPalindrome(bin: uint<20>, bcd: uint<24>) -> (q: bool) {
+    if bin >: $pow(10, 5) {
+        // abccba
+        let a = uint(bcd[23 -: 4]) == uint(bcd[3:0])
+        let b = uint(bcd[19 -: 4]) == uint(bcd[7:4])
+        let c = uint(bcd[15 -: 4]) == uint(bcd[11:8])
+        q = a and b and c
+    } else if bin >: $pow(10, 4) {
+        // abcba
+        let a = uint(bcd[19 -: 4]) == uint(bcd[3:0])
+        let b = uint(bcd[15 -: 4]) == uint(bcd[11:8])
+        q = a and b
+    } else if bin >: $pow(10, 3) {
+        // abba
+        let a = uint(bcd[15 -: 4]) == uint(bcd[3:0])
+        let b = uint(bcd[11 -: 4]) == uint(bcd[7:4])
+        q = a and b
+    } else if bin >: $pow(10, 2) {
+        // aba
+        q = uint(bcd[11 -: 4]) == uint(bcd[3:0])
+    } else if bin >: 10 {
+        // ab
+        q = uint(bcd[7 -: 4]) == uint(bcd[3:0])
+    } else {
+        // a
+        q = true
+    }
+}
+
+module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: uint<20>) {
+    let i = Reg<uint<10>>(clk, rst)
+    let j = Reg<uint<10>>(clk, rst)
+    let prod = i.q * j.q
+    let max = Reg<uint<20>>(clk, rst, q)
+    let bcd = BCD20(bin: prod).q
+    let is_palindrome = IsPalindrome(bin: prod, bcd: bcd[23:0]).q
+    is_ready = i.q == 999 and j.q == 999
+
+    if not is_ready {
+        if j.q == 999 {
+            i.d = i.q + 1
+            j.d = 0
+        } else {
+            j.d = j.q + 1
+        }
+
+        if is_palindrome and prod >: max.q {
+            max.d = prod
+        }
+    }
+
+    // $printf("i = %d, j = %d, prod = %d, is_palindrome = %d, max = %d\n", i.q, j.q, prod, is_palindrome, max.q)
+}
