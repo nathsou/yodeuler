@@ -1,7 +1,7 @@
-import Euler7
+import Euler8
 
 module Top(clk: clock, rst: bool) -> () {
-  let solution = Euler7::Solution(clk, rst)
+  let solution = Euler8::Solution(clk, rst)
   
   if solution.is_ready {
     $printf("%d\n", solution.q)
