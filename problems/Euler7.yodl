@@ -1,0 +1,22 @@
+import Primes
+
+module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: uint<17>) {
+    let i = Reg<uint<17>>(clk, rst, q)
+    let count = Reg<uint<14>>(clk, rst)
+    let is_prime = Primes::IsPrime<17>(clk, n: i.q)
+    is_ready = count.q == 10_000
+    is_prime.rst = rst
+
+    if not is_ready {
+        if count.q == 0 {
+            // skip 2
+            i.d = 3
+            count.d = 1
+            is_prime.rst = true
+        } else if is_prime.is_ready {
+            i.d = i.q + 2
+            is_prime.rst = true
+            count.d = count.q + is_prime.q
+        }
+    }
+}
