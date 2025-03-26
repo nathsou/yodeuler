@@ -8,7 +8,7 @@ module IsPrime<N: uint>(clk: clock, rst: bool, n: uint<N>) -> (is_ready: bool, q
 
     if n[0] == 1'b0 {
         ready.d = true
-        is_prime.d = false
+        is_prime.d = n == 2
     } else if is_initialised and (not ready.q) {
         if n % i.q == 0 {
             ready.d = true

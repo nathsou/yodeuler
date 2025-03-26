@@ -1,0 +1,41 @@
+
+module GCD<N: uint>(
+    clk: clock,
+    rst: bool,
+    a: uint<N>,
+    b: uint<N>,
+) -> (
+    is_ready: bool,
+    q: uint<N>,
+) {
+    let m = Reg<uint<N>>(clk, rst)
+    let n = Reg<uint<N>>(clk, rst)
+    let ready = Reg<bool>(clk, rst, q: is_ready)
+
+    if not is_ready {
+        if m.q == 0 and b != 0 {
+            m.d = a
+            n.d = b
+        } else if n.q == 0 {
+            ready.d = true
+        } else {
+            m.d = n.q
+            n.d = m.q % n.q
+        }
+    }
+
+    q = m.q
+}
+
+module LCM<N: uint>(
+    clk: clock,
+    rst: bool,
+    a: uint<N>,
+    b: uint<N>,
+) -> (
+    is_ready: bool,
+    q: uint<N>,
+) {
+    let gcd = Arithmetic::GCD<N>(clk, rst, a, b, is_ready).q
+    q = a * (b / gcd)
+}

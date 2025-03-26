@@ -1,0 +1,25 @@
+import Arithmetic
+
+module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: uint<28>) {
+    let i = Reg<uint<5>>(clk, rst)
+    let acc = Reg<uint<28>>(clk, rst, q)
+    let ready = Reg<bool>(clk, rst, q: is_ready)
+    let lcm = Arithmetic::LCM<28>(clk, a: acc.q, b: {23'd0, i.q})
+    lcm.rst = rst
+
+    if not is_ready {
+        if i.q == 0 or acc.q == 0 {
+            i.d = 1
+            acc.d = 1
+            lcm.rst = true
+        } else if i.q <: 20 {
+            if lcm.is_ready {
+                acc.d = lcm.q
+                lcm.rst = true
+                i.d = i.q + 1
+            }
+        } else {
+            ready.d = true
+        }
+    }
+}
