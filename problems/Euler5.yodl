@@ -8,7 +8,7 @@ module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: uint<28>) {
     lcm.rst = rst
 
     if not is_ready {
-        if i.q == 0 or acc.q == 0 {
+        if i.q == 0 {
             i.d = 1
             acc.d = 1
             lcm.rst = true
