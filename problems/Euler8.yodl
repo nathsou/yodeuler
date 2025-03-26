@@ -23,16 +23,15 @@ const Grid = [
 ]
 
 module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: uint<52>) {
-    is_ready = true
     let i = Reg<uint<10>>(clk, rst)
     let max = Reg<uint<52>>(clk, rst, q)
     let prod =
         Grid[i.q + 0] * Grid[i.q + 1] * Grid[i.q + 2] * Grid[i.q + 3] *
         Grid[i.q + 4] * Grid[i.q + 5] * Grid[i.q + 6] * Grid[i.q + 7] *
         Grid[i.q + 8] * Grid[i.q + 9] * Grid[i.q + 10] * Grid[i.q + 11] *
-        Grid[i.q + 12];
+        Grid[i.q + 12]
 
     max.d = prod >: max.q ? prod : max.q
-    is_ready = i.q == 996
+    is_ready = i.q == 987
     i.d = i.q + (not is_ready)
 }
