@@ -1,0 +1,34 @@
+import Primes
+
+module Euler10<Min: uint, Max: uint>(clk: clock, rst: bool) -> (is_ready: bool, q: uint<38>) {
+    $assert(Min and 1'b1 == 1'b1, "Min must be odd")
+    let sum = Reg<uint<38>>(clk, rst, q)
+    let i = Reg<uint<$clog2(Max)>>(clk, rst)
+    let is_prime = Primes::IsPrime<$clog2(Max)>(clk, n: i.q)
+    is_prime.rst = rst
+    is_ready = i.q >: Max
+
+    if not is_ready {
+        if i.q == 0 {
+            i.d = Min
+            is_prime.rst = true
+        } else if is_prime.is_ready {
+            if is_prime.q {
+                sum.d = sum.q + i.q
+            }
+
+            i.d = i.q + 2
+            is_prime.rst = true
+        }
+    }
+}
+
+module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: uint<38>) {
+    // solve 4 sub-problems in parallel
+    let inst1 = Euler10<Min: 1, Max: 500_000>(clk, rst)
+    let inst2 = Euler10<Min: 500_001, Max: 1_000_000>(clk, rst)
+    let inst3 = Euler10<Min: 1_000_001, Max: 1_500_000>(clk, rst)
+    let inst4 = Euler10<Min: 1_500_001, Max: 2_000_000>(clk, rst)
+    is_ready = andr {inst1.is_ready, inst2.is_ready, inst3.is_ready, inst4.is_ready}
+    q = 2 + inst1.q + inst2.q + inst3.q + inst4.q
+}

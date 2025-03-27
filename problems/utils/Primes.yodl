@@ -6,9 +6,9 @@ module IsPrime<N: uint>(clk: clock, rst: bool, n: uint<N>) -> (is_ready: bool, q
     let ready = Reg<bool>(clk, rst, q: is_ready)
     let is_prime = Reg<bool>(clk, rst, q)
 
-    if n[0] == 1'b0 {
+    if n <: 4 {
         ready.d = true
-        is_prime.d = n == 2
+        is_prime.d = n == 2 or n == 3
     } else if is_initialised and (not ready.q) {
         if n % i.q == 0 {
             ready.d = true
