@@ -1,0 +1,59 @@
+
+module CollatzLen(clk: clock, rst: bool, n: uint<20>) -> (is_ready: bool, q: uint<20>) {
+  let a = Reg<uint<32>>(clk, rst)
+  let len = Reg<uint<20>>(clk, rst, q)
+  is_ready = a.q == 1
+
+  if not is_ready {
+    if a.q == 0 {
+      a.d = {12'd0, n}
+      len.d = 1
+    } else {
+      len.d = len.q + 1
+      a.d = a.q[0] ? 3 * a.q + 1 : a.q shr 1
+    }
+  }
+}
+
+module Euler14<Min: uint, Max: uint>(
+  clk: clock, rst: bool,
+) -> (
+  is_ready: bool, n: uint<20>, len: uint<20>,
+) {
+  let max_len = Reg<uint<20>>(clk, rst, q: len)
+  let max_n = Reg<uint<20>>(clk, rst, q: n)
+  let a = Reg<uint<20>>(clk, rst)
+  let length = CollatzLen(clk, n: a.q)
+  is_ready = a.q == Max
+  length.rst = rst
+
+  if not is_ready {
+    if a.q == 0 {
+      a.d = Min
+    } else if length.is_ready {
+      if length.q >: max_len.q {
+        max_len.d = length.q
+        max_n.d = a.q
+      }
+      
+      a.d = a.q + 1
+      length.rst = true
+    }
+  }
+}
+
+module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: uint<20>) {
+  let inst1 = Euler14<Min: 1, Max: 250_000>(clk, rst)
+  let inst2 = Euler14<Min: 250_001, Max: 500_000>(clk, rst)
+  let inst3 = Euler14<Min: 500_001, Max: 750_000>(clk, rst)
+  let inst4 = Euler14<Min: 750_001, Max: 1_000_000>(clk, rst)
+  is_ready = andr {inst1.is_ready, inst2.is_ready, inst3.is_ready, inst4.is_ready}
+  
+  let max = {
+    let max1 = inst1.len >: inst2.len ? { n: inst1.n, len: inst1.len } : { n: inst2.n, len: inst2.len }
+    let max2 = inst3.len >: inst4.len ? { n: inst3.n, len: inst3.len } : { n: inst4.n, len: inst4.len }
+    (max1.len >: max2.len ? max1 : max2)
+  }
+
+  q = max.n
+}
