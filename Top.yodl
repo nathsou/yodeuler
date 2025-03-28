@@ -1,7 +1,7 @@
-import Euler12
+import Euler13
 
 module Top(clk: clock, rst: bool) -> () {
-  let solution = Euler12::Solution(clk, rst)
+  let solution = Euler13::Solution(clk, rst)
   
   if solution.is_ready {
     $printf("%d\n", solution.q)
