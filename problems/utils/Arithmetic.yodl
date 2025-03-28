@@ -39,3 +39,22 @@ module LCM<N: uint>(
     let gcd = Arithmetic::GCD<N>(clk, rst, a, b, is_ready).q
     q = a * (b / gcd)
 }
+
+module CountFactors(clk: clock, rst: bool, n: uint<27>) -> (is_ready: bool, q: uint<10>) {
+  let i = Reg<uint<27>>(clk, rst)
+  let count = Reg<uint<10>>(clk, rst, q)
+  is_ready = i.q * i.q >: n
+
+  if not is_ready {
+    if i.q == 0 {
+      i.d = 2
+      count.d = 2 // 1 and n are always factors
+    } else {
+      if n % i.q == 0 {
+        count.d = count.q + 2 // i and n / i are factors
+      }
+
+      i.d = i.q + 1
+    }
+  }
+}
