@@ -2,12 +2,12 @@
 #include <iostream>
 
 #include <verilated.h>
-#include "VTop.h"
+#include "VSim.h"
 
 int main(int argc, char** argv) {
     const std::unique_ptr<VerilatedContext> contextp{new VerilatedContext};
     contextp->debug(0);
-    const std::unique_ptr<VTop> top{new VTop{contextp.get(), "Top"}};
+    const std::unique_ptr<VSim> top{new VSim{contextp.get(), "Sim"}};
 
     top->clk = 0;
     unsigned long i = 0L;

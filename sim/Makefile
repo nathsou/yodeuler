@@ -1,21 +1,20 @@
 # Adapted from https://projectf.io/posts/verilog-sim-verilator-sdl/
 
-SHELL := /usr/bin/fish
 VFLAGS = -O3 -DENABLE_INITIAL_MEM_ --x-assign fast --x-initial fast --noassert
 
-all: VTop
+all: VSim
 
-VTop.mk: Top.sv
-	verilator ${VFLAGS} -I./ Top.sv --top-module Top -cc --exe -j 0 wrapper.cpp -o sim
+VSim.mk: Sim.sv
+	verilator ${VFLAGS} -I./ Sim.sv --top-module Sim -cc --exe -j 0 wrapper.cpp -o sim
 
-VTop: VTop.mk
-	make -C ./obj_dir -f VTop.mk
+VSim: VSim.mk
+	make -C ./obj_dir -f VSim.mk
 
-Top.fir:
-	cd .. && yodl Top.yodl "write_firrtl sim/Top.fir"
+Sim.fir:
+	cd .. && yodl Sim.yodl "write_firrtl sim/Sim.fir"
 
-Top.sv: Top.fir
-	firtool -O=release --format=fir --verilog -disable-all-randomization -strip-debug-info Top.fir -o Top.sv
+Sim.sv: Sim.fir
+	firtool -O=release --format=fir --verilog -disable-all-randomization -strip-debug-info Sim.fir -o Sim.sv
 
 clean:
-	rm -rf obj_dir sim Top.sv Top.fir VTop.mk
+	rm -rf obj_dir sim Sim.sv Sim.fir VSim.mk

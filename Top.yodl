@@ -1,10 +1,42 @@
 import Euler14
+import UART
 
-module Top(clk: clock, rst: bool) -> () {
-  let solution = Euler14::Solution(clk, rst)
-  
-  if solution.is_ready {
-    $printf("%d\n", solution.q)
-    $stop()
-  }
+module Bin2ASCII<N: uint>(clk: clock, rst: bool, d: uint<N>, data_valid: bool) -> (is_ready: bool, q: uint<8 * $cdiv(N, 3)>) {
+    const Len = 8 * $cdiv(N, 3)
+    let ascii = Reg<uint<Len>>(clk, rst, q)
+    let bin = Reg<uint<N>>(clk, rst)
+    let init = Reg<bool>(clk, rst)
+    is_ready = data_valid and init.q and bin.q == 0
+
+    if data_valid and not is_ready {
+        if not init.q {
+            init.d = true
+            bin.d = d
+        } else {
+            let digit: uint<8> = '0' + bin.q % 10
+            bin.d = bin.q / 10
+            ascii.d = {digit, ascii.q shr 8}[Len - 1 : 0]
+        }
+    }
+}
+
+module Top(clk: clock, rst_n: bool) -> (led: uint<8>, usb_tx: uint<1>) {
+    const N = 20
+    let rst = not rst_n
+    let slow_clk = {
+        let clk_div = Reg<uint<8>>(clk, rst)
+        clk_div.d = clk_div.q + 1
+        clock(clk_div.q[2])
+    }
+    let solution = Euler14::Solution(clk: slow_clk, rst)
+    let ascii = Bin2ASCII<N>(clk: slow_clk, rst, d: solution.q, data_valid: solution.is_ready)
+    let transmitter = UART::ShiftTransmitter<Bytes: $cdiv(N, 3) + 1, ClockFreq: 100_000_000, BaudRate: 9600>(
+        clk,
+        data: {ascii.q, ' '},
+        data_valid: ascii.is_ready,
+        tx: usb_tx,
+    )
+
+    transmitter.rst = rst or transmitter.is_done
+    led = solution.q[7:0]
 }
