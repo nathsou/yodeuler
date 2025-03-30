@@ -1,0 +1,54 @@
+
+module Key(w: uint<5>, h: uint<5>) -> (q: uint<9>) {
+  let min_max = w <: h ? { min: w, max: h } : { min: h, max: w } 
+  q = min_max.min * 20 + min_max.max
+}
+
+module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: uint<38>) {
+  let w = Reg<uint<5>>(clk, rst)
+  let h = Reg<uint<5>>(clk, rst)
+  let count: uint<38>
+  let prev_w: uint<5> = w.q - 1
+  let prev_h: uint<5> = h.q - 1
+  let addr1 = Key(w: w.q != 0 ? prev_w : 0, h: h.q).q
+  let addr2 = Key(w: w.q, h: h.q != 0 ? prev_h : 0).q
+  let memo = Memory<
+      T:  uint<38>,
+      Depth: 420,
+      ReadPorts: 2,
+      WritePorts: 1,
+      ReadLatency: 0,
+      WriteLatency: 1,
+    >(
+      read: [
+        { clk: clk, en: true, addr: addr1 },
+        { clk: clk, en: true, addr: addr2 },
+      ],
+      write: [
+        { clk: clk, en: not is_ready, addr: Key(w: w.q, h: h.q).q, data: count, mask: true },
+      ],
+    )
+
+    is_ready = w.q == 20 and h.q == 20
+
+    if not is_ready {
+      if w.q <: 20 {
+        w.d = w.q + 1
+      } else {
+        h.d = h.q + 1
+        w.d = 1
+      }
+    }
+
+    if w.q == 0 or h.q == 0 {
+      count = 1
+    } else if w.q == 1 {
+      count = h.q + 1
+    } else if h.q == 1 {
+      count = w.q + 2
+    } else {
+      count = memo.q[0] + memo.q[1]
+    }
+
+    q = count
+}
