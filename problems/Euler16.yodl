@@ -1,0 +1,18 @@
+
+module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: uint<11>) {
+    let bin = Reg<uint<1001>>(clk, rst)
+    let init = Reg<bool>(clk, rst)
+    is_ready = init.q and bin.q == 0
+    let sum = Reg<uint<11>>(clk, rst, q)
+
+    if not is_ready {
+        if not init.q {
+            init.d = true
+            bin.d = 1 shl 1000
+        } else {
+            let digit: uint<4> = bin.q % 10
+            bin.d = bin.q / 10
+            sum.d = sum.q + digit
+        }
+    }
+}

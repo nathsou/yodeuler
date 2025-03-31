@@ -1,7 +1,7 @@
-import Euler15
+import Euler16
 
 module Sim(clk: clock, rst: bool) -> () {
-    let solution = Euler15::Solution(clk, rst)
+    let solution = Euler16::Solution(clk, rst)
 
   if solution.is_ready {
     $printf("%d\n", solution.q)
