@@ -43,7 +43,7 @@ module LCM[N: Nat](
 module CountFactors(clk: clock, rst: bool, n: u27) -> (is_ready: bool, q: u10) {
   let i = Reg[u27](clk, rst)
   let count = Reg[u10](clk, rst, q)
-  is_ready = i.q * i.q >= n
+  is_ready = i.q * i.q > n
 
   if not is_ready {
     if i.q == 0 {

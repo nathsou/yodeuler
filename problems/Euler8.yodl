@@ -31,7 +31,7 @@ module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: u52) {
         Grid[i.q + 8] * Grid[i.q + 9] * Grid[i.q + 10] * Grid[i.q + 11] *
         Grid[i.q + 12]
 
-    max.d = prod >= max.q ? prod : max.q
+    max.d = prod > max.q ? prod : max.q
     is_ready = i.q == 987
     i.d = i.q + (not is_ready)
 }

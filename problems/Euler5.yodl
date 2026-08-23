@@ -12,7 +12,7 @@ module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: u28) {
             i.d = 1
             acc.d = 1
             lcm.rst = true
-        } else if i.q <= 20 {
+        } else if i.q < 20 {
             if lcm.is_ready {
                 acc.d = lcm.q
                 lcm.rst = true

@@ -69,10 +69,10 @@ module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: u28) {
         CellAt(x: x2n, y: y2).q *
         CellAt(x: x3n, y: y3).q
 
-    let max1 = right >= down ? right : down
-    let max2 = diag1 >= max1 ? diag1 : max1
-    let max3 = diag2 >= max2 ? diag2 : max2
-    max.d = max3 >= max.q ? max3 : max.q
+    let max1 = right > down ? right : down
+    let max2 = diag1 > max1 ? diag1 : max1
+    let max3 = diag2 > max2 ? diag2 : max2
+    max.d = max3 > max.q ? max3 : max.q
 
     if not is_ready {
         if x.q == 19 {

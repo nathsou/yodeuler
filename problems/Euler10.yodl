@@ -7,7 +7,7 @@ module Euler10[Min: Nat, Max: Nat](clk: clock, rst: bool) -> (is_ready: bool, q:
     let i = Reg[uint[Width]](clk, rst)
     let is_prime = Primes::IsPrime[Width](clk, n: i.q)
     is_prime.rst = rst
-    is_ready = i.q >= Max
+    is_ready = i.q > Max
 
     if not is_ready {
         if i.q == 0 {

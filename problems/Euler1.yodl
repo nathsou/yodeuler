@@ -2,7 +2,7 @@
 module Solution(clk: clock, rst: bool) -> (q: u18, is_ready: bool) {
   const INPUT = 1000
   let counter = Reg[uint[clog2!(INPUT)]](clk, rst)
-  let is_active = counter.q <= INPUT
+  let is_active = counter.q < INPUT
   counter.d = counter.q + is_active
   let sum = Reg[u18](clk, en: is_active, rst, q)
   let is_divisible = counter.q % 3 == 0 or counter.q % 5 == 0

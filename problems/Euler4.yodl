@@ -234,26 +234,26 @@ module BCD20(bin: u20) -> (q: u28) {
 }
 
 module IsPalindrome(bin: u20, bcd: u24) -> (q: bool) {
-    if bin >= pow!(10, 5) {
+    if bin > pow!(10, 5) {
         // abccba
         let a = uint!(bcd[23 -: 4]) == uint!(bcd[3:0])
         let b = uint!(bcd[19 -: 4]) == uint!(bcd[7:4])
         let c = uint!(bcd[15 -: 4]) == uint!(bcd[11:8])
         q = a and b and c
-    } else if bin >= pow!(10, 4) {
+    } else if bin > pow!(10, 4) {
         // abcba
         let a = uint!(bcd[19 -: 4]) == uint!(bcd[3:0])
         let b = uint!(bcd[15 -: 4]) == uint!(bcd[11:8])
         q = a and b
-    } else if bin >= pow!(10, 3) {
+    } else if bin > pow!(10, 3) {
         // abba
         let a = uint!(bcd[15 -: 4]) == uint!(bcd[3:0])
         let b = uint!(bcd[11 -: 4]) == uint!(bcd[7:4])
         q = a and b
-    } else if bin >= pow!(10, 2) {
+    } else if bin > pow!(10, 2) {
         // aba
         q = uint!(bcd[11 -: 4]) == uint!(bcd[3:0])
-    } else if bin >= 10 {
+    } else if bin > 10 {
         // ab
         q = uint!(bcd[7 -: 4]) == uint!(bcd[3:0])
     } else {
@@ -279,7 +279,7 @@ module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: u20) {
             j.d = j.q + 1
         }
 
-        if is_palindrome and prod >= max.q {
+        if is_palindrome and prod > max.q {
             max.d = prod
         }
     }

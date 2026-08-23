@@ -1,6 +1,6 @@
 
 module Key(w: u5, h: u5) -> (q: u9) {
-  let min_max = w <= h ? ( min: w, max: h ) : ( min: h, max: w )
+  let min_max = w < h ? (min: w, max: h) : (min: h, max: w)
   q = min_max.min * 20 + min_max.max
 }
 
@@ -21,18 +21,18 @@ module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: u38) {
       WriteLatency: 1,
     ](
       read: [
-        ( clk: clk, en: true, addr: addr1 ),
-        ( clk: clk, en: true, addr: addr2 ),
+        (clk: clk, en: true, addr: addr1),
+        (clk: clk, en: true, addr: addr2),
       ],
       write: [
-        ( clk: clk, en: not is_ready, addr: Key(w: w.q, h: h.q).q, data: count, mask: true ),
+        (clk: clk, en: not is_ready, addr: Key(w: w.q, h: h.q).q, data: count, mask: true),
       ],
     )
 
     is_ready = w.q == 20 and h.q == 20
 
     if not is_ready {
-      if w.q <= 20 {
+      if w.q < 20 {
         w.d = w.q + 1
       } else {
         h.d = h.q + 1

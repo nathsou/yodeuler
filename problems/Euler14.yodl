@@ -31,7 +31,7 @@ module Euler14[Min: Nat, Max: Nat](
     if a.q == 0 {
       a.d = Min
     } else if length.is_ready {
-      if length.q >= max_len.q {
+      if length.q > max_len.q {
         max_len.d = length.q
         max_n.d = a.q
       }
@@ -50,9 +50,9 @@ module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: u20) {
   is_ready = andr cat!(inst1.is_ready, inst2.is_ready, inst3.is_ready, inst4.is_ready)
   
   let max = {
-    let max1 = inst1.len >= inst2.len ? ( n: inst1.n, len: inst1.len ) : ( n: inst2.n, len: inst2.len )
-    let max2 = inst3.len >= inst4.len ? ( n: inst3.n, len: inst3.len ) : ( n: inst4.n, len: inst4.len )
-    (max1.len >= max2.len ? max1 : max2)
+    let max1 = inst1.len > inst2.len ? (n: inst1.n, len: inst1.len) : (n: inst2.n, len: inst2.len)
+    let max2 = inst3.len > inst4.len ? (n: inst3.n, len: inst3.len) : (n: inst4.n, len: inst4.len)
+    (max1.len > max2.len ? max1 : max2)
   }
 
   q = max.n
