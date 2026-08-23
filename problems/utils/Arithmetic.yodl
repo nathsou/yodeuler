@@ -1,16 +1,16 @@
 
-module GCD<N: uint>(
+module GCD[N: Nat](
     clk: clock,
     rst: bool,
-    a: uint<N>,
-    b: uint<N>,
+    a: uint[N],
+    b: uint[N],
 ) -> (
     is_ready: bool,
-    q: uint<N>,
+    q: uint[N],
 ) {
-    let m = Reg<uint<N>>(clk, rst)
-    let n = Reg<uint<N>>(clk, rst)
-    let ready = Reg<bool>(clk, rst, q: is_ready)
+    let m = Reg[uint[N]](clk, rst)
+    let n = Reg[uint[N]](clk, rst)
+    let ready = Reg[bool](clk, rst, q: is_ready)
 
     if not is_ready {
         if m.q == 0 and b != 0 {
@@ -27,23 +27,23 @@ module GCD<N: uint>(
     q = m.q
 }
 
-module LCM<N: uint>(
+module LCM[N: Nat](
     clk: clock,
     rst: bool,
-    a: uint<N>,
-    b: uint<N>,
+    a: uint[N],
+    b: uint[N],
 ) -> (
     is_ready: bool,
-    q: uint<N>,
+    q: uint[N],
 ) {
-    let gcd = Arithmetic::GCD<N>(clk, rst, a, b, is_ready).q
+    let gcd = Arithmetic::GCD[N](clk, rst, a, b, is_ready).q
     q = a * (b / gcd)
 }
 
-module CountFactors(clk: clock, rst: bool, n: uint<27>) -> (is_ready: bool, q: uint<10>) {
-  let i = Reg<uint<27>>(clk, rst)
-  let count = Reg<uint<10>>(clk, rst, q)
-  is_ready = i.q * i.q >: n
+module CountFactors(clk: clock, rst: bool, n: u27) -> (is_ready: bool, q: u10) {
+  let i = Reg[u27](clk, rst)
+  let count = Reg[u10](clk, rst, q)
+  is_ready = i.q * i.q >= n
 
   if not is_ready {
     if i.q == 0 {

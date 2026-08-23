@@ -108,10 +108,10 @@ package Stage {
   const DONE = 2'd2
 }
 
-module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: uint<33>) {
-  let sum = Reg<uint<172>>(clk, rst)
-  let i = Reg<uint<$clog2(100)>>(clk, rst)
-  let stage = Reg<uint<2>>(clk, rst)
+module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: u33) {
+  let sum = Reg[u172](clk, rst)
+  let i = Reg[uint[clog2!(100)]](clk, rst)
+  let stage = Reg[u2](clk, rst)
   is_ready = stage.q == Stage::DONE
   q = sum.q[32:0]
 

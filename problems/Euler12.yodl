@@ -1,10 +1,10 @@
 import Arithmetic
 
-module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: uint<27>) {
-  let tri = Reg<uint<27>>(clk, rst, q)
-  let i = Reg<uint<14>>(clk, rst)
+module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: u27) {
+  let tri = Reg[u27](clk, rst, q)
+  let i = Reg[u14](clk, rst)
   let factors = Arithmetic::CountFactors(clk, n: tri.q)
-  is_ready = factors.is_ready and factors.q >: 500
+  is_ready = factors.is_ready and factors.q >= 500
   factors.rst = rst
 
   if not is_ready and factors.is_ready {

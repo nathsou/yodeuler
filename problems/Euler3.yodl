@@ -1,7 +1,7 @@
 import Primes
 
 const INPUT = 600851475143
-const N = $clog2(INPUT) / 2
+const N = clog2!(INPUT) / 2
 
 package Stage {
     const INIT = 2'd0
@@ -10,12 +10,12 @@ package Stage {
     const DONE = 2'd3
 }
 
-module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: uint<N>) {
-    let stage = Reg<uint<2>>(clk, rst)
-    let max = Reg<uint<N>>(clk, rst, q)
-    let i = Reg<uint<N>>(clk, rst)
-    let ready = Reg<bool>(clk, rst, q: is_ready)
-    let is_prime = Primes::IsPrime<N>(clk, n: i.q)
+module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: uint[N]) {
+    let stage = Reg[u2](clk, rst)
+    let max = Reg[uint[N]](clk, rst, q)
+    let i = Reg[uint[N]](clk, rst)
+    let ready = Reg[bool](clk, rst, q: is_ready)
+    let is_prime = Primes::IsPrime[N](clk, n: i.q)
     is_prime.rst = rst
 
     match stage.q {

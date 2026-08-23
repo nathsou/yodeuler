@@ -7,7 +7,7 @@ module="Top"
 mkdir -p output
 rm -f output/$module.json output/$module.asc output/$module.bin output/$module.fir output/$module.sv
 
-yodl Top.yodl "write_firrtl output/$module.fir"
+bunx --bun yodl@latest Top.yodl "write_firrtl output/$module.fir"
 
 firtool --format=fir -O=release --verilog \
     -disable-all-randomization -strip-debug-info \

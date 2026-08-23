@@ -22,16 +22,16 @@ const Grid = [
     7, 1, 6, 3, 6, 2, 6, 9, 5, 6, 1, 8, 8, 2, 6, 7, 0, 4, 2, 8, 2, 5, 2, 4, 8, 3, 6, 0, 0, 8, 2, 3, 2, 5, 7, 5, 3, 0, 4, 2, 0, 7, 5, 2, 9, 6, 3, 4, 5, 0,
 ]
 
-module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: uint<52>) {
-    let i = Reg<uint<10>>(clk, rst)
-    let max = Reg<uint<52>>(clk, rst, q)
+module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: u52) {
+    let i = Reg[u10](clk, rst)
+    let max = Reg[u52](clk, rst, q)
     let prod =
         Grid[i.q + 0] * Grid[i.q + 1] * Grid[i.q + 2] * Grid[i.q + 3] *
         Grid[i.q + 4] * Grid[i.q + 5] * Grid[i.q + 6] * Grid[i.q + 7] *
         Grid[i.q + 8] * Grid[i.q + 9] * Grid[i.q + 10] * Grid[i.q + 11] *
         Grid[i.q + 12]
 
-    max.d = prod >: max.q ? prod : max.q
+    max.d = prod >= max.q ? prod : max.q
     is_ready = i.q == 987
     i.d = i.q + (not is_ready)
 }
