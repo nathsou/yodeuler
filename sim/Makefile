@@ -11,7 +11,7 @@ VSim: VSim.mk
 	make -C ./obj_dir -f VSim.mk
 
 Sim.fir:
-	cd .. && bunx --bun yodl@latest Sim.yodl "write_firrtl sim/Sim.fir"
+	cd .. && bunx --bun yodl@0.3.1 Sim.yodl "write_firrtl sim/Sim.fir"
 
 Sim.sv: Sim.fir
 	firtool -O=release --format=fir --verilog -disable-all-randomization -strip-debug-info Sim.fir -o Sim.sv
