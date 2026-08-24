@@ -1,8 +1,8 @@
 
-module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: uint<25>) {
+module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: u25) {
     const Sum = 1000
-    let a = Reg<uint<$clog2(Sum)>>(clk, rst)
-    let b = Reg<uint<$clog2(Sum)>>(clk, rst)
+    let a = Reg[uint[clog2!(Sum)]](clk, rst)
+    let b = Reg[uint[clog2!(Sum)]](clk, rst)
     let complement = Sum - a.q
     let c = complement - b.q
     is_ready = a.q * a.q + b.q * b.q == c * c

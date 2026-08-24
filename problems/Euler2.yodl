@@ -1,9 +1,9 @@
 
-module Solution(clk: clock, rst: bool) -> (q: uint<23>, is_ready: bool) {
-  let sum = Reg<uint<23>>(clk, rst, q)
-  let a = Reg<uint<23>>(clk, rst)
-  let b = Reg<uint<22>>(clk, rst)
-  is_ready = a.q >: 4_000_000
+module Solution(clk: clock, rst: bool) -> (q: u23, is_ready: bool) {
+  let sum = Reg[u23](clk, rst, q)
+  let a = Reg[u23](clk, rst)
+  let b = Reg[u22](clk, rst)
+  is_ready = a.q > 4_000_000
 
   if a.q == 0 {
     a.d = 1

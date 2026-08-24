@@ -1,8 +1,8 @@
 
-module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: uint<25>) {
-    let i = Reg<uint<7>>(clk, rst)
-    let sum = Reg<uint<25>>(clk, rst)
-    let sum_sq = Reg<uint<25>>(clk, rst)
+module Solution(clk: clock, rst: bool) -> (is_ready: bool, q: u25) {
+    let i = Reg[u7](clk, rst)
+    let sum = Reg[u25](clk, rst)
+    let sum_sq = Reg[u25](clk, rst)
     is_ready = i.q == 101
     q = sum.q * sum.q - sum_sq.q
 
