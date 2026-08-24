@@ -1,7 +1,7 @@
 import Primes
 
 module Euler10[Min: Nat, Max: Nat](clk: clock, rst: bool) -> (is_ready: bool, q: u38) {
-    // Each instantiated range starts at an odd number.
+    assert!(Min % 2 == 1, "Min must be odd")
     const Width = clog2!(Max)
     let sum = Reg[u38](clk, rst, q)
     let i = Reg[uint[Width]](clk, rst)
